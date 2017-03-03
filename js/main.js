@@ -10,6 +10,7 @@ var wrap = document.getElementsByClassName('drag-wrap');
 /* 工具函数 */
 function nextDrag(element) {                     // 获取下一个滑块
     var brother = element.nextSibling;
+
     while (brother && brother.nodeName === '#text') {
         brother = nextDrag(brother);
     }
@@ -29,6 +30,7 @@ function getLocation(event) {                    // 计算滑块降落的位置
     var moveY = event.clientY - startY;
     var y = startTop + moveY;
     var x = startLeft + moveX;
+
 
     if (x < 230) {                               // 容器的序号
         location[0] = 0;

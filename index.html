@@ -15,32 +15,120 @@
         <h2>小练习5 </h2>
         <div class="drag-container">
             <ol class="drag-wrap">
-                <li class="drag">0</li>
-                <li class="drag">1</li>
-                <li class="drag">2</li>
-                <li class="drag">3</li>
-                <li class="drag">4</li>
-                <li class="drag">5</li>
+                <li class="drag" draggable="true" ondragstart="dsHandler(event);">0</li>
+                <li class="drag" draggable="true" ondragstart="dsHandler(event);">1</li>
+                <li class="drag" draggable="true" ondragstart="dsHandler(event);">2</li>
+                <li class="drag" draggable="true" ondragstart="dsHandler(event);">3</li>
+                <li class="drag" draggable="true" ondragstart="dsHandler(event);">4</li>
+                <li class="drag" draggable="true" ondragstart="dsHandler(event);">5</li>
             </ol>
             <ol class="drag-wrap">
-                <li class="drag">6</li>
-                <li class="drag">7</li>
-                <li class="drag">8</li>
-                <li class="drag">9</li>
-                <li class="drag">10</li>
-                <li class="drag">11</li>
+                <li class="drag" draggable="true" ondragstart="dsHandler(event);">6</li>
+                <li class="drag" draggable="true" ondragstart="dsHandler(event);">7</li>
+                <li class="drag" draggable="true" ondragstart="dsHandler(event);">8</li>
+                <li class="drag" draggable="true" ondragstart="dsHandler(event);">9</li>
+                <li class="drag" draggable="true" ondragstart="dsHandler(event);">10</li>
+                <li class="drag" draggable="true" ondragstart="dsHandler(event);">11</li>
             </ol>
             <ol class="drag-wrap">
-                <li class="drag">12</li>
-                <li class="drag">13</li>
-                <li class="drag">14</li>
-                <li class="drag">15</li>
-                <li class="drag">16</li>
-                <li class="drag">17</li>
+                <li class="drag" draggable="true" ondragstart="dsHandler(event);">12</li>
+                <li class="drag" draggable="true" ondragstart="dsHandler(event);">13</li>
+                <li class="drag" draggable="true" ondragstart="dsHandler(event);">14</li>
+                <li class="drag" draggable="true" ondragstart="dsHandler(event);">15</li>
+                <li class="drag" draggable="true" ondragstart="dsHandler(event);">16</li>
+                <li class="drag" draggable="true" ondragstart="dsHandler(event);">17</li>
             </ol>
         </div>
     </div>
-    <script src="js/util.js"></script>
-    <script src="js/main.js"></script>
+    <script>
+        var diffY;         // 点击滑块时鼠标的坐标
+        var dropY;
+
+        var dsHandler = function (evt){
+          /*  console.log(evt);*/
+            evt.dataTransfer.setData("Text","<item>"+evt.target.innerHTML);
+
+        }
+        var dragWrap=document.querySelectorAll('.drag-wrap');
+        var tar;
+
+        document.onmousedown=function (e) {
+
+
+            diffY=e.pageY- getElementTop(e.target);
+                var e=e.target;
+
+
+
+
+            if(e.draggable==true){
+                tar=e;
+
+            }
+        }
+
+        for(var i=0,len=dragWrap.length;i<len;i++){
+            (function (i) {
+                dragWrap[i].ondrop=function (e) {
+                        dropY=e.pageY-diffY;
+                            var arr=positionArr(this)
+                    var index=calPosition(arr,dropY);
+                            if(this.children.length<11){
+                                if(tar){
+                                    this.children[index]==null?this.appendChild(tar):this.insertBefore(tar,this.children[index]);
+                                    tar=null;
+                                }
+                            }
+
+
+
+                }
+            })(i)
+        }
+        document.ondragover = function(evt){
+
+            evt.preventDefault()
+        }
+
+        function getElementLeft(element){
+            var actualLeft = element.offsetLeft;
+            var current = element.offsetParent;
+            while (current !== null){
+                actualLeft += current.offsetLeft;
+                current = current.offsetParent;
+            }
+            return actualLeft;
+        }
+        function getElementTop(element){
+            var actualTop = element.offsetTop;
+            var current = element.offsetParent;
+            while (current !== null){
+                actualTop += current.offsetTop;
+                current = current.offsetParent;
+            }
+            return actualTop;
+        }
+
+
+        function positionArr(ele) {
+            var arr=[];
+            for(var i=0;i<ele.children.length;i++){
+                arr.push(getElementTop(ele.children[i]));
+            }
+            return arr;
+        }
+   function calPosition(arr,x) {
+       for(var i=0,len=arr.length;i<len;i++){
+           if((x<arr[i])&&(x<arr[i+1])){
+               return i;
+           }else if((x>arr[i])&&(i+1==len)){
+               return i+1;
+           }else if((x>arr[i])&&(x<arr[i+1])){
+               return i+1;
+           }
+       }
+   }
+    </script>
+
 </body>
 </html>
